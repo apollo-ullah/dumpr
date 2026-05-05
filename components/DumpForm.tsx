@@ -148,10 +148,29 @@ export function DumpForm({ levels, onChange, onSubmit, loading, error }: Props) 
     onChange({ ...levels, [key]: next });
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (key: keyof PLevels, e: KeyboardEvent<HTMLTextAreaElement>) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && canSubmit) {
       e.preventDefault();
       onSubmit();
+      return;
+    }
+
+    if (e.key === "Backspace" && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      const target = e.currentTarget;
+      if (target.selectionStart !== target.selectionEnd) return;
+      const cursor = target.selectionStart;
+      const value = levels[key];
+      const lineStart = value.lastIndexOf("\n", cursor - 1) + 1;
+      const lineEndIdx = value.indexOf("\n", cursor);
+      const lineEnd = lineEndIdx === -1 ? value.length : lineEndIdx;
+      const line = value.slice(lineStart, lineEnd);
+
+      if (line === BULLET && lineStart > 0) {
+        e.preventDefault();
+        const next = value.slice(0, lineStart - 1) + value.slice(lineEnd);
+        pendingCursor.current = { key, pos: lineStart - 1 };
+        onChange({ ...levels, [key]: next });
+      }
     }
   };
 
@@ -199,7 +218,7 @@ export function DumpForm({ levels, onChange, onSubmit, loading, error }: Props) 
               value={levels[section.key]}
               onChange={(e) => handleChange(section.key, e)}
               onPaste={(e) => handlePaste(section.key, e)}
-              onKeyDown={handleKeyDown}
+              onKeyDown={(e) => handleKeyDown(section.key, e)}
               disabled={loading}
               rows={3}
               className="w-full rounded-warm border border-warm-border bg-warm-surface px-4 py-3 font-mono text-[14px] leading-6 text-warm-fg shadow-warm focus:border-warm-sage focus:outline-none focus:ring-1 focus:ring-warm-sage disabled:opacity-60"
