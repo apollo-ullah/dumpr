@@ -162,7 +162,7 @@ export function DumpForm({ levels, onChange, onSubmit, loading, error }: Props) 
           What&apos;s on your mind?
         </h1>
         <p className="mt-1 text-sm text-warm-muted">
-          Drop items by priority. Empty levels are skipped.
+          Drop items by priority.
         </p>
       </header>
 
