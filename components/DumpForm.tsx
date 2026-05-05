@@ -162,7 +162,7 @@ export function DumpForm({ levels, onChange, onSubmit, loading, error }: Props) 
           What&apos;s on your mind?
         </h1>
         <p className="mt-1 text-sm text-warm-muted">
-          Drop items by priority. Hit ↵ for a new bullet. Empty levels are skipped.
+          Drop items by priority. Empty levels are skipped.
         </p>
       </header>
 
@@ -218,9 +218,9 @@ export function DumpForm({ levels, onChange, onSubmit, loading, error }: Props) 
               </span>
             </span>
           ) : canSubmit ? (
-            "⌘ ↵ to process"
+            <>Hit ↵ for a new bullet · ⌘ ↵ to process</>
           ) : (
-            " "
+            "Hit ↵ for a new bullet"
           )}
         </span>
         <button
