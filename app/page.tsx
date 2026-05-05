@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { DumpForm } from "@/components/DumpForm";
+import {
+  DumpForm,
+  EMPTY_LEVELS,
+  serializeLevels,
+  type PLevels,
+} from "@/components/DumpForm";
 import { PreviewTable } from "@/components/PreviewTable";
 import { WriteBar } from "@/components/WriteBar";
 import { PartialFailureCallout } from "@/components/PartialFailureCallout";
@@ -15,7 +20,7 @@ type DoneState = {
 };
 
 export default function Page() {
-  const [dump, setDump] = useState("");
+  const [levels, setLevels] = useState<PLevels>(EMPTY_LEVELS);
   const [phase, setPhase] = useState<Phase>("input");
   const [items, setItems] = useState<Item[]>([]);
   const [today, setToday] = useState<string>("");
@@ -29,7 +34,7 @@ export default function Page() {
       const res = await fetch("/api/process", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ dump }),
+        body: JSON.stringify({ dump: serializeLevels(levels) }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -75,7 +80,7 @@ export default function Page() {
   }
 
   function reset() {
-    setDump("");
+    setLevels(EMPTY_LEVELS);
     setItems([]);
     setDone(null);
     setError(null);
@@ -85,8 +90,8 @@ export default function Page() {
   if (phase === "input" || phase === "processing") {
     return (
       <DumpForm
-        value={dump}
-        onChange={setDump}
+        levels={levels}
+        onChange={setLevels}
         onSubmit={process}
         loading={phase === "processing"}
         error={error}
