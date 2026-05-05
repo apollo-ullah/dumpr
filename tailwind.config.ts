@@ -23,19 +23,6 @@ export default {
       },
       boxShadow: { warm: "0 1px 2px rgba(15, 15, 15, 0.04)" },
       borderRadius: { warm: "10px" },
-      keyframes: {
-        progress: {
-          "0%": { transform: "translateX(-100%)" },
-          "100%": { transform: "translateX(400%)" },
-        },
-        statusFade: {
-          "0%, 100%": { opacity: "0" },
-          "20%, 80%": { opacity: "1" },
-        },
-      },
-      animation: {
-        progress: "progress 1.4s ease-in-out infinite",
-      },
     },
   },
   plugins: [],

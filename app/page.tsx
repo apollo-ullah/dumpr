@@ -90,10 +90,11 @@ export default function Page() {
 
   const busy = phase === "processing" || phase === "writing";
 
-  if (phase === "input" || phase === "processing") {
-    return (
-      <>
-        <TopProgressBar active={busy} />
+  return (
+    <>
+      <TopProgressBar active={busy} />
+
+      {(phase === "input" || phase === "processing") && (
         <DumpForm
           levels={levels}
           onChange={setLevels}
@@ -101,50 +102,46 @@ export default function Page() {
           loading={phase === "processing"}
           error={error}
         />
-      </>
-    );
-  }
-
-  if (phase === "preview" || phase === "writing") {
-    return (
-      <>
-        <TopProgressBar active={busy} />
-        <PreviewTable today={today} items={items} onItemChange={updateItem} />
-        <WriteBar
-          count={items.length}
-          onWrite={() => write(0)}
-          onDiscard={discard}
-          writing={phase === "writing"}
-        />
-      </>
-    );
-  }
-
-  // phase === "done"
-  return (
-    <div className="mx-auto max-w-3xl px-6 py-12">
-      <div className="rounded-warm border border-warm-border bg-warm-surface px-6 py-5 shadow-warm">
-        <div className="font-medium text-warm-fg">
-          Wrote {done!.written} of {items.length} items.
-        </div>
-        {done!.failures.length === 0 && (
-          <div className="mt-1 text-sm text-warm-muted">All clean.</div>
-        )}
-        <button
-          type="button"
-          onClick={reset}
-          className="mt-4 rounded-md bg-warm-sage px-4 py-2 text-sm font-medium text-white shadow-warm"
-        >
-          New dump
-        </button>
-      </div>
-      {done!.failures.length > 0 && (
-        <PartialFailureCallout
-          failures={done!.failures}
-          onRetry={(fromIndex) => write(fromIndex)}
-          onDiscard={reset}
-        />
       )}
-    </div>
+
+      {(phase === "preview" || phase === "writing") && (
+        <>
+          <PreviewTable today={today} items={items} onItemChange={updateItem} />
+          <WriteBar
+            count={items.length}
+            onWrite={() => write(0)}
+            onDiscard={discard}
+            writing={phase === "writing"}
+          />
+        </>
+      )}
+
+      {phase === "done" && (
+        <div className="mx-auto max-w-3xl px-6 py-12">
+          <div className="rounded-warm border border-warm-border bg-warm-surface px-6 py-5 shadow-warm">
+            <div className="font-medium text-warm-fg">
+              Wrote {done!.written} of {items.length} items.
+            </div>
+            {done!.failures.length === 0 && (
+              <div className="mt-1 text-sm text-warm-muted">All clean.</div>
+            )}
+            <button
+              type="button"
+              onClick={reset}
+              className="mt-4 rounded-md bg-warm-sage px-4 py-2 text-sm font-medium text-white shadow-warm"
+            >
+              New dump
+            </button>
+          </div>
+          {done!.failures.length > 0 && (
+            <PartialFailureCallout
+              failures={done!.failures}
+              onRetry={(fromIndex) => write(fromIndex)}
+              onDiscard={reset}
+            />
+          )}
+        </div>
+      )}
+    </>
   );
 }
