@@ -77,20 +77,12 @@ type Props = {
   error: string | null;
 };
 
-const SECTIONS: Array<{
-  key: keyof PLevels;
-  tag: string;
-  label: string;
-  placeholder: string;
-}> = [
-  { key: "p1", tag: "P1", label: "Critical", placeholder: "- submit notion event proposal by may 7th" },
-  { key: "p2", tag: "P2", label: "Important", placeholder: "- install mom's wipers friday" },
-  { key: "p3", tag: "P3", label: "Normal", placeholder: "- buy protein powder saturday" },
-  { key: "p4", tag: "P4", label: "Low", placeholder: "- find new gym shoes next month" },
+const SECTIONS: Array<{ key: keyof PLevels; tag: string; label: string }> = [
+  { key: "p1", tag: "P1", label: "Critical" },
+  { key: "p2", tag: "P2", label: "Important" },
+  { key: "p3", tag: "P3", label: "Normal" },
+  { key: "p4", tag: "P4", label: "Low" },
 ];
-
-const DATE_HINTS = ["by may 7", "friday", "this week", "tomorrow", "next month", "eventually"];
-const VERB_HINTS = ["submit", "install", "buy", "draft", "build", "ship", "review"];
 
 export function DumpForm({ levels, onChange, onSubmit, loading, error }: Props) {
   const refs = useRef<Record<keyof PLevels, HTMLTextAreaElement | null>>({
@@ -154,37 +146,15 @@ export function DumpForm({ levels, onChange, onSubmit, loading, error }: Props) 
         </p>
       </header>
 
-      <div className="mb-6 rounded-warm border border-warm-border bg-warm-surface px-5 py-4 shadow-warm">
-        <div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-warm-muted">
-          Cues to spark memory
-        </div>
-        <div className="space-y-3 text-xs">
-          <div className="flex items-baseline gap-3">
-            <span className="w-16 shrink-0 text-warm-muted">Dates</span>
-            <span className="font-mono text-warm-fg/80">
-              {DATE_HINTS.join("  ·  ")}
-            </span>
-          </div>
-          <div className="flex items-baseline gap-3">
-            <span className="w-16 shrink-0 text-warm-muted">Verbs</span>
-            <span className="font-mono text-warm-fg/80">
-              {VERB_HINTS.join("  ·  ")}
-            </span>
-          </div>
-          <div className="flex gap-3">
-            <span className="w-16 shrink-0 pt-0.5 text-warm-muted">Domains</span>
-            <span className="flex flex-wrap gap-1.5">
-              {DOMAIN_VALUES.map((d) => (
-                <span
-                  key={d}
-                  className="rounded bg-warm-chip px-2 py-0.5 text-[11px] text-warm-sage"
-                >
-                  {d}
-                </span>
-              ))}
-            </span>
-          </div>
-        </div>
+      <div className="mb-6 flex flex-wrap gap-1.5">
+        {DOMAIN_VALUES.map((d) => (
+          <span
+            key={d}
+            className="rounded bg-warm-chip px-2 py-0.5 text-[11px] text-warm-sage"
+          >
+            {d}
+          </span>
+        ))}
       </div>
 
       {error && (
@@ -212,8 +182,7 @@ export function DumpForm({ levels, onChange, onSubmit, loading, error }: Props) 
               onKeyDown={handleKeyDown}
               disabled={loading}
               rows={3}
-              placeholder={section.placeholder}
-              className="w-full rounded-warm border border-warm-border bg-warm-surface px-4 py-3 font-mono text-[14px] leading-6 text-warm-fg shadow-warm placeholder:text-warm-muted focus:border-warm-sage focus:outline-none focus:ring-1 focus:ring-warm-sage disabled:opacity-60"
+              className="w-full rounded-warm border border-warm-border bg-warm-surface px-4 py-3 font-mono text-[14px] leading-6 text-warm-fg shadow-warm focus:border-warm-sage focus:outline-none focus:ring-1 focus:ring-warm-sage disabled:opacity-60"
             />
           </div>
         ))}
