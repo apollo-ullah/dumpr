@@ -2,7 +2,11 @@
 
 Type a brain dump → Claude parses it into Notion rows → review/edit → write.
 
-![dumpr screenshot](docs/screenshot.png)
+![dumpr — type your dump in P1–P4 buckets](docs/input.png)
+
+![dumpr — review what Claude parsed, edit anything low-confidence](docs/preview.png)
+
+![dumpr — one click and it's in Notion](docs/done.png)
 
 Built on the Claude Agent SDK. Uses your Claude Code OAuth, so there's no API
 bill — inference runs on your Max subscription.
