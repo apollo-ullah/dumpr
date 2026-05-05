@@ -38,6 +38,9 @@ yarn-error.log*
 .superpowers/
 .worktrees/
 
+# internal design specs and implementation plans (workflow artifacts, kept local only)
+docs/superpowers/
+
 # scratch screenshot directory (workflow tool dumps PNGs here)
 /screenshots/
 

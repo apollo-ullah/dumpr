@@ -48,8 +48,3 @@ Local-only Next.js (App Router) GUI that wraps the `ady-operating-system` Claude
 - Tailwind v3 with a custom `warm-*` palette (`tailwind.config.ts`). Use these tokens; don't introduce ad-hoc hex.
 - Tests mock the agent SDK and Notion client (see `tests/agent.test.ts`, `tests/notion.test.ts`) — do not hit live services in tests.
 - Claude Code OAuth at `~/.claude/config` is part of the runtime contract. The agent SDK uses it instead of `ANTHROPIC_API_KEY`. Don't suggest moving OAuth into the repo or asking for an API key.
-
-## Reference docs in the repo
-
-- `docs/superpowers/specs/2026-05-04-brain-dump-gui-design.md` — design spec.
-- `docs/superpowers/plans/2026-05-04-brain-dump-gui.md` — implementation plan.

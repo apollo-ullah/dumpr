@@ -13,9 +13,13 @@ bill — inference runs on your Max subscription.
 
 ## Why
 
-<!-- TODO(ady): write 3-5 sentences in your own voice. The personal-problem
-hook from the X-post: capturing P1/P2/P3 brain dumps fast, the metadata
-typing is the bottleneck, dumpr removes it. -->
+every productivity system fails at the same point: capture and triage live in the same moment.
+
+you have a thought, and the system asks you to also pick a category, priority, due date, energy level, and project. so you pick none. the thought rots in an untagged row.
+
+i've been a notion guy for years and watched my own database become a graveyard of half-captured ideas. the structure was there, i just never had the energy to fill it in mid-flow.
+
+dumpr fixes that. dump first, let claude do the boring part, review the table, ship to notion. capture and triage stay separate, the way they should be.
 
 ## Setup
 
@@ -104,9 +108,7 @@ Open <http://localhost:3000> and bookmark it. For development:
 sends both as a system prompt to Claude via `@anthropic-ai/claude-agent-sdk`.
 The model returns a JSON array of typed items. Zod validates the shape, the
 UI shows a preview table for inline editing, and on confirm the rows are
-written to Notion sequentially via `@notionhq/client`. See
-`docs/superpowers/specs/2026-05-04-brain-dump-gui-design.md` for the full
-design.
+written to Notion sequentially via `@notionhq/client`.
 
 ## Tests
 
