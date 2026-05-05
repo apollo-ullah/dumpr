@@ -1,8 +1,7 @@
 import { readFileSync } from "node:fs";
-import { homedir } from "node:os";
 import { join } from "node:path";
 
-const SKILL_PATH = join(homedir(), ".claude/skills/ady-operating-system/SKILL.md");
+const SKILL_PATH = join(process.cwd(), "skills/SKILL.md");
 
 let cached: string | null = null;
 
@@ -13,7 +12,7 @@ export function loadSkill(): string {
   } catch (err) {
     throw new Error(
       `Could not read SKILL.md at ${SKILL_PATH}. ` +
-        `Ensure the ady-operating-system skill is installed. (${(err as Error).message})`
+        `Expected at skills/SKILL.md in repo root. (${(err as Error).message})`
     );
   }
   return cached;
