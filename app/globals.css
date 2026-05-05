@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  background-color: #fbf9f4;
+  color: #37352f;
+  -webkit-font-smoothing: antialiased;
+  font-family: ui-sans-serif, "Inter", system-ui, sans-serif;
+}
