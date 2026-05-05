@@ -12,9 +12,6 @@ export const PRIORITY_VALUES = [
 
 export const TYPE_VALUES = ["Task", "Project"] as const;
 export const EFFORT_VALUES = ["Low", "Medium", "High"] as const;
-export const STATUS_VALUES = [
-  "Backlog", "Planned", "In Progress", "Blocked", "Done", "Dropped",
-] as const;
 
 export const CAPTURE_STATUS_VALUES = ["Planned", "Backlog"] as const;
 
