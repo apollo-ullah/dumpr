@@ -34,6 +34,10 @@ yarn-error.log*
 .env*
 !.env.local.example
 
+# brainstorm + worktree directories (skill workspaces)
+.superpowers/
+.worktrees/
+
 # vercel
 .vercel
 
