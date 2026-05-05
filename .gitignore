@@ -38,6 +38,9 @@ yarn-error.log*
 .superpowers/
 .worktrees/
 
+# scratch screenshot directory (workflow tool dumps PNGs here)
+/screenshots/
+
 # vercel
 .vercel
 
