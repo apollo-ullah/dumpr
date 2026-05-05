@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useRef, type ChangeEvent, type ClipboardEvent, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type ClipboardEvent, type KeyboardEvent } from "react";
 import { DOMAIN_VALUES } from "@/lib/types";
+
+const STATUS_MESSAGES = [
+  "Reading your dump…",
+  "Inferring domains and dates…",
+  "Checking effort signals…",
+  "Almost there…",
+];
 
 export type PLevels = { p1: string; p2: string; p3: string; p4: string };
 
@@ -93,9 +100,22 @@ export function DumpForm({ levels, onChange, onSubmit, loading, error }: Props) 
   });
   const pendingCursor = useRef<{ key: keyof PLevels; pos: number } | null>(null);
 
+  const [statusIdx, setStatusIdx] = useState(0);
+
   useEffect(() => {
     refs.current.p1?.focus();
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      setStatusIdx(0);
+      return;
+    }
+    const id = setInterval(() => {
+      setStatusIdx((i) => Math.min(i + 1, STATUS_MESSAGES.length - 1));
+    }, 2500);
+    return () => clearInterval(id);
+  }, [loading]);
 
   useEffect(() => {
     const pending = pendingCursor.current;
@@ -189,7 +209,20 @@ export function DumpForm({ levels, onChange, onSubmit, loading, error }: Props) 
       </div>
 
       <div className="mt-6 flex items-center justify-between">
-        <span className="text-xs text-warm-muted">{canSubmit ? "⌘ ↵ to process" : " "}</span>
+        <span className="text-xs text-warm-muted">
+          {loading ? (
+            <span className="inline-flex items-center gap-2">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-warm-sage" />
+              <span key={statusIdx} className="text-warm-fg/70 transition-opacity duration-300">
+                {STATUS_MESSAGES[statusIdx]}
+              </span>
+            </span>
+          ) : canSubmit ? (
+            "⌘ ↵ to process"
+          ) : (
+            " "
+          )}
+        </span>
         <button
           type="button"
           onClick={onSubmit}

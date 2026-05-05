@@ -10,6 +10,7 @@ import {
 import { PreviewTable } from "@/components/PreviewTable";
 import { WriteBar } from "@/components/WriteBar";
 import { PartialFailureCallout } from "@/components/PartialFailureCallout";
+import { TopProgressBar } from "@/components/TopProgressBar";
 import type { Item, WriteFailure } from "@/lib/types";
 
 type Phase = "input" | "processing" | "preview" | "writing" | "done";
@@ -87,21 +88,27 @@ export default function Page() {
     setPhase("input");
   }
 
+  const busy = phase === "processing" || phase === "writing";
+
   if (phase === "input" || phase === "processing") {
     return (
-      <DumpForm
-        levels={levels}
-        onChange={setLevels}
-        onSubmit={process}
-        loading={phase === "processing"}
-        error={error}
-      />
+      <>
+        <TopProgressBar active={busy} />
+        <DumpForm
+          levels={levels}
+          onChange={setLevels}
+          onSubmit={process}
+          loading={phase === "processing"}
+          error={error}
+        />
+      </>
     );
   }
 
   if (phase === "preview" || phase === "writing") {
     return (
       <>
+        <TopProgressBar active={busy} />
         <PreviewTable today={today} items={items} onItemChange={updateItem} />
         <WriteBar
           count={items.length}
