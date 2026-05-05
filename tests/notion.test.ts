@@ -168,4 +168,26 @@ describe("writeItems", () => {
       })
     );
   });
+
+  it("attaches a domain emoji icon to each created page", async () => {
+    mockCreate.mockResolvedValue({});
+    await writeItems([
+      { ...baseItem, id: "1", domain: "Health" },
+      { ...baseItem, id: "2", domain: "Family" },
+      { ...baseItem, id: "3", domain: "Heave" },
+    ]);
+
+    expect(mockCreate).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ icon: { type: "emoji", emoji: "💪" } })
+    );
+    expect(mockCreate).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ icon: { type: "emoji", emoji: "👨‍👩‍👧" } })
+    );
+    expect(mockCreate).toHaveBeenNthCalledWith(
+      3,
+      expect.objectContaining({ icon: { type: "emoji", emoji: "💼" } })
+    );
+  });
 });
