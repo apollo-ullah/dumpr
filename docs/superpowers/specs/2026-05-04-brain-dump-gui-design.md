@@ -67,7 +67,7 @@ Single Next.js app, App Router, runs on `localhost:3000` via `npm run dev`. Thre
 
 **Configuration (`.env.local`):**
 - `NOTION_TOKEN` — internal integration token from Notion settings.
-- `NOTION_DATA_SOURCE_ID` — `2d13ad1b-1fe7-8071-92a4-000bcd80335b` (from `reference_notion_inbox.md`).
+- `NOTION_DATA_SOURCE_ID` — `<your-data-source-uuid>` (from `reference_notion_inbox.md`).
 - Claude OAuth comes from Claude Code's existing token store; Agent SDK picks it up automatically — no env var needed.
 
 **Process model:**

@@ -383,7 +383,7 @@ This module crashes the server boot at import time if either env var is missing 
 Write to `.env.local.example`:
 ```
 NOTION_TOKEN=secret_xxx_paste_internal_integration_token_here
-NOTION_DATA_SOURCE_ID=2d13ad1b-1fe7-8071-92a4-000bcd80335b
+NOTION_DATA_SOURCE_ID=<your-data-source-uuid>
 ```
 
 - [ ] **Step 3: Confirm `.env.local` is gitignored**
@@ -2213,13 +2213,13 @@ git commit -m "feat: app/page.tsx — orchestrates input/preview/writing/done ph
 
 - [ ] **Step 1:** Create a Notion internal integration at https://www.notion.so/profile/integrations. Capability: insert content. Workspace: the one with the Inbox DB.
 
-- [ ] **Step 2:** Open the Inbox database (URL `https://www.notion.so/2d13ad1b1fe780d3a569e9953ad1e8e7`), click "Add connections" in the database settings, grant your new integration access.
+- [ ] **Step 2:** Open the Inbox database (URL `https://www.notion.so/<your-inbox-database-id>`), click "Add connections" in the database settings, grant your new integration access.
 
 - [ ] **Step 3:** Create `.env.local`:
 
 ```
 NOTION_TOKEN=secret_<paste your integration token>
-NOTION_DATA_SOURCE_ID=2d13ad1b-1fe7-8071-92a4-000bcd80335b
+NOTION_DATA_SOURCE_ID=<your-data-source-uuid>
 ```
 
 - [ ] **Step 4:** Verify Claude Code OAuth is active:
@@ -2268,7 +2268,7 @@ need to find new gym shoes for next month
   - Within ~5s, success state appears: `Wrote 4 of 4 items.`
   - "New dump" button visible.
 
-- [ ] **Step 7:** Open the actual Notion Inbox database (`https://www.notion.so/2d13ad1b1fe780d3a569e9953ad1e8e7`). Confirm 4 new rows exist with the expected Title, Domain, Priority Level, Status. Confirm `Next Action` and `Why (1%)` are blank for all 4 rows.
+- [ ] **Step 7:** Open the actual Notion Inbox database (`https://www.notion.so/<your-inbox-database-id>`). Confirm 4 new rows exist with the expected Title, Domain, Priority Level, Status. Confirm `Next Action` and `Why (1%)` are blank for all 4 rows.
 
 - [ ] **Step 8:** If anything fails, do not commit. Debug and fix.
 

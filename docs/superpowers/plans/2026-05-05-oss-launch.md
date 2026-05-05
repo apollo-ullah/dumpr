@@ -250,7 +250,7 @@ No commit — this is local filesystem state, not in the repo.
 Current contents:
 ```
 NOTION_TOKEN=secret_xxx_paste_internal_integration_token_here
-NOTION_DATA_SOURCE_ID=2d13ad1b-1fe7-8071-92a4-000bcd80335b
+NOTION_DATA_SOURCE_ID=<your-data-source-uuid>
 ```
 
 New contents:
