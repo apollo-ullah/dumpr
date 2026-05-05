@@ -4,10 +4,10 @@ import * as Select from "@radix-ui/react-select";
 import { useState } from "react";
 import type { Item, ItemFlags } from "@/lib/types";
 import {
+  CAPTURE_STATUS_VALUES,
   DOMAIN_VALUES,
   EFFORT_VALUES,
   PRIORITY_VALUES,
-  STATUS_VALUES,
   TYPE_VALUES,
 } from "@/lib/types";
 
@@ -26,7 +26,7 @@ const SELECT_OPTIONS: Record<EditableField, readonly string[] | null> = {
   priority: PRIORITY_VALUES,
   effort: EFFORT_VALUES,
   dueDate: null,
-  status: STATUS_VALUES,
+  status: CAPTURE_STATUS_VALUES,
 };
 
 function clearFlag(flags: ItemFlags, field: EditableField): ItemFlags {

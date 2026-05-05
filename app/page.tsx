@@ -11,6 +11,7 @@ import { PreviewTable } from "@/components/PreviewTable";
 import { WriteBar } from "@/components/WriteBar";
 import { PartialFailureCallout } from "@/components/PartialFailureCallout";
 import { TopProgressBar } from "@/components/TopProgressBar";
+import { DashboardStrip } from "@/components/DashboardStrip";
 import type { Item, WriteFailure } from "@/lib/types";
 
 type Phase = "input" | "processing" | "preview" | "writing" | "done";
@@ -93,6 +94,7 @@ export default function Page() {
   return (
     <>
       <TopProgressBar active={busy} />
+      <DashboardStrip />
 
       {(phase === "input" || phase === "processing") && (
         <DumpForm
