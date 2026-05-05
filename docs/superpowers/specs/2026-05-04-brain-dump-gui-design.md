@@ -163,9 +163,9 @@ Errors:   400 invalid body
 - **`lib/agent.ts`**
   - `processDump(dump: string): Promise<{ today: string, items: Item[] }>` — calls Claude via Agent SDK with the system prompt + dump as user message. Validates response against Zod `Item[]` schema. Throws on validation failure (caught by route → returns 500).
 - **`lib/notion.ts`**
-  - `writeItems(items: Item[]): Promise<{ written: number, failures: WriteFailure[] }>` — loops items in order. Builds property object per item (see mapping below). Calls `client.pages.create({ parent: { type: "data_source_id", data_source_id: env.NOTION_DATA_SOURCE_ID }, properties })`. Uses `data_source_id` (not `database_id`) — matches the value Ady already has in `reference_notion_inbox.md` and works correctly for the multi-source-aware Inbox database. Stops on first failure, returns partial result.
+  - `writeItems(items: Item[]): Promise<{ written: number, failures: WriteFailure[] }>` — loops items in order. Builds property object per item (see mapping below). Calls `client.pages.create({ parent: { data_source_id: env.NOTION_DATA_SOURCE_ID }, properties })`. Uses `data_source_id` (not `database_id`) — matches the value Ady already has in `reference_notion_inbox.md` and works for the multi-source-aware Inbox database (Notion API version `2026-03-11`+). Stops on first failure, returns partial result.
   - **Property mapping (the tested surface):**
-    - `Title` → `title` property (rich_text in Notion's title format)
+    - `Title` → Notion `title` property: `{ title: [{ text: { content: item.title } }] }`
     - `Type` → select
     - `Domain` → select
     - `Priority Level` → select (em-dash strings, e.g. `P1 – Critical`)
