@@ -23,9 +23,9 @@ Claude Code OAuth (at `~/.claude/config`) is the auth path for the agent SDK —
 
 ## Architecture
 
-Local-only Next.js (App Router) GUI that wraps the `ady-operating-system` Claude Code skill. Flow: brain dump → Claude infers Notion rows → user previews/edits → write to Notion Inbox.
+Local-only Next.js (App Router) GUI that wraps the `dumpr-capture` Claude Code skill. Flow: brain dump → Claude infers Notion rows → user previews/edits → write to Notion Inbox.
 
-**The skill lives in the repo.** `lib/skill.ts` reads `skills/SKILL.md` (relative to repo root) at request time. If you change inference behavior, edit that file directly — it's the source of truth. The terminal Claude Code skill at `~/.claude/skills/ady-operating-system/SKILL.md` is a symlink to the repo file (Ady's local setup only; forkers don't need this). This app appends a JSON-output override block (`JSON_INSTRUCTIONS_TEMPLATE` in `lib/skill.ts`) to the SKILL.md content, which disables the skill's terminal-style preview/approval/tool-call behavior and forces a single JSON object.
+**The skill lives in the repo.** `lib/skill.ts` reads `skills/SKILL.md` (relative to repo root) at request time. If you change inference behavior, edit that file directly — it's the source of truth. A terminal Claude Code skill at `~/.claude/skills/dumpr-capture/SKILL.md` can symlink to the repo file (optional; only needed if you also want to invoke the skill from the Claude Code CLI). This app appends a JSON-output override block (`JSON_INSTRUCTIONS_TEMPLATE` in `lib/skill.ts`) to the SKILL.md content, which disables the skill's terminal-style preview/approval/tool-call behavior and forces a single JSON object.
 
 **Two API routes, one screen.**
 - `POST /api/process` — `lib/agent.ts` runs `query()` from `@anthropic-ai/claude-agent-sdk` with `allowedTools: []`, strips code fences, parses, validates against `ItemsResponseSchema`. Returns `{ today, items }`. Server attaches a UUID per item for React keys.
@@ -36,7 +36,7 @@ Local-only Next.js (App Router) GUI that wraps the `ady-operating-system` Claude
 **Notion property mapping gotchas** (`lib/notion.ts`):
 - Property names: `Title`, `Type`, `Domain`, `Priority Level` (with space), `Effort`, `Status`, `Due Date`.
 - Priority values use an **em-dash** (`–`), not a hyphen — Notion select options match exactly.
-- `Why (1%)` and `Next Action` are intentionally **never written**. Don't add them. (User memory: these are Ady-intrinsic; inferring them adds friction.)
+- `Why (1%)` and `Next Action` are intentionally **never written**. Don't add them. The "why" is intrinsic to the user; inferring it adds friction. A well-scoped title already encodes the next action.
 - Page icon is set per-row from `DOMAIN_ICONS`.
 - `dueDate: null` means omit the property; don't send `{ date: null }`.
 

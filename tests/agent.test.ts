@@ -26,7 +26,7 @@ const validJson = JSON.stringify({
     {
       title: "Submit proposal",
       type: "Task",
-      domain: "Notion CL",
+      domain: "Work",
       priority: "P1 – Critical",
       effort: "Low",
       dueDate: "2026-05-07",

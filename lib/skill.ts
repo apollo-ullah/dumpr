@@ -39,7 +39,7 @@ Schema:
     {
       "title": string,
       "type": "Task" | "Project",
-      "domain": "Personal Project" | "Heave" | "Agency" | "GDG Projects" | "Notion CL" | "Arena" | "Coursework" | "Family" | "Health" | "Deen" | "Admin" | "Money" | "Content" | "Career" | "Growth" | "Personal",
+      "domain": "Personal Project" | "Work" | "Clubs" | "Community" | "Coursework" | "Family" | "Health" | "Deen" | "Admin" | "Money" | "Content" | "Career" | "Growth" | "Personal",
       "priority": "P1 – Critical" | "P2 – Important" | "P3 – Normal" | "P4 – Low",
       "effort": "Low" | "Medium" | "High",
       "dueDate": "YYYY-MM-DD" | null,

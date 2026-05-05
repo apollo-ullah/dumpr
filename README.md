@@ -56,8 +56,9 @@ so a hyphen will silently fail with a write error like
 ### 3. Customize your domains (the personal axis)
 
 Domains are the life-buckets that mean something to **you**. The repo ships
-with the author's 16 domains (`Heave`, `GDG Projects`, `Coursework`, …) as
-a working example — they will not match your life. Edit three places:
+with 14 generic example domains (`Work`, `Clubs`, `Community`, `Coursework`,
+`Family`, `Health`, `Deen`, …) as a starting point — your real life buckets
+are probably different. Edit three places:
 
 1. **`lib/types.ts`** — `DOMAIN_VALUES` array (the canonical list).
 2. **`lib/notion.ts`** — `DOMAIN_ICONS` map (one emoji per domain;

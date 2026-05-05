@@ -4,9 +4,9 @@ import type { Item } from "@/lib/types";
 
 const baseItem: Item = {
   id: "test-1",
-  title: "Submit Notion event proposal",
+  title: "Submit project proposal",
   type: "Task",
-  domain: "Notion CL",
+  domain: "Work",
   priority: "P1 – Critical",
   effort: "Low",
   dueDate: "2026-05-07",
@@ -18,7 +18,7 @@ describe("itemToProperties", () => {
   it("maps Title as a Notion title property", () => {
     const props = itemToProperties(baseItem);
     expect(props.Title).toEqual({
-      title: [{ text: { content: "Submit Notion event proposal" } }],
+      title: [{ text: { content: "Submit project proposal" } }],
     });
   });
 
@@ -33,9 +33,9 @@ describe("itemToProperties", () => {
 
   it("maps Domain as a select property with exact dropdown name", () => {
     const cases = [
-      "Personal Project", "Heave", "Agency", "GDG Projects", "Notion CL",
-      "Arena", "Coursework", "Family", "Health", "Deen", "Admin",
-      "Money", "Content", "Career", "Growth", "Personal",
+      "Personal Project", "Work", "Clubs", "Community", "Coursework",
+      "Family", "Health", "Deen", "Admin", "Money", "Content",
+      "Career", "Growth", "Personal",
     ] as const;
     for (const domain of cases) {
       const props = itemToProperties({ ...baseItem, domain });
@@ -126,7 +126,7 @@ describe("writeItems", () => {
   it("stops on first failure and returns partial result", async () => {
     mockCreate
       .mockResolvedValueOnce({})
-      .mockRejectedValueOnce(new Error("select option 'Notion CL' not found"))
+      .mockRejectedValueOnce(new Error("select option 'Work' not found"))
       .mockResolvedValueOnce({});
 
     const items: Item[] = [
@@ -143,7 +143,7 @@ describe("writeItems", () => {
     expect(result.failures[0]).toEqual({
       index: 1,
       item: items[1],
-      error: "select option 'Notion CL' not found",
+      error: "select option 'Work' not found",
     });
   });
 
@@ -174,7 +174,7 @@ describe("writeItems", () => {
     await writeItems([
       { ...baseItem, id: "1", domain: "Health" },
       { ...baseItem, id: "2", domain: "Family" },
-      { ...baseItem, id: "3", domain: "Heave" },
+      { ...baseItem, id: "3", domain: "Work" },
     ]);
 
     expect(mockCreate).toHaveBeenNthCalledWith(

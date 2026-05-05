@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const DOMAIN_VALUES = [
-  "Personal Project", "Heave", "Agency", "GDG Projects", "Notion CL",
-  "Arena", "Coursework", "Family", "Health", "Deen", "Admin",
-  "Money", "Content", "Career", "Growth", "Personal",
+  "Personal Project", "Work", "Clubs", "Community", "Coursework",
+  "Family", "Health", "Deen", "Admin", "Money", "Content",
+  "Career", "Growth", "Personal",
 ] as const;
 
 export const PRIORITY_VALUES = [

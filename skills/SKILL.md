@@ -1,11 +1,11 @@
 ---
-name: ady-operating-system
-description: Use when Ady is dumping tasks, todos, or items for triage into his Notion personal OS. Triggers AGGRESSIVELY on any message that opens with "P1" / "P2" / "P3" / "P4" as a line header followed by items, or contains phrases like "capture this", "add to inbox", "dump this", "process this brain dump", "process this", "triage this", "add these tasks", "throw these in". Over-trigger is preferred — false positives are cheap, missed captures are expensive. If unsure whether to trigger, trigger.
+name: dumpr-capture
+description: Use when the user is dumping tasks, todos, or items for triage into a Notion personal OS. Triggers AGGRESSIVELY on any message that opens with "P1" / "P2" / "P3" / "P4" as a line header followed by items, or contains phrases like "capture this", "add to inbox", "dump this", "process this brain dump", "process this", "triage this", "add these tasks", "throw these in". Over-trigger is preferred — false positives are cheap, missed captures are expensive. If unsure whether to trigger, trigger.
 ---
 
-# Ady's Operating System
+# Dumpr Capture
 
-Personal task-routing skill. Parses Ady's brain dumps, infers all Notion fields, previews a table, then batch-writes to the Notion inbox database. Approval is only required when at least one inferred cell is low-confidence (flagged `?`); fully-confident batches write through without asking.
+Brain-dump triage skill. Parses the user's brain dumps, infers all Notion fields, previews a table, then batch-writes to the Notion inbox database. Approval is only required when at least one inferred cell is low-confidence (flagged `?`); fully-confident batches write through without asking.
 
 ## Modes
 
@@ -19,7 +19,7 @@ This skill is architected to support multiple capture/processing modes. **Only o
 | Unstick | future | Review stalled items, propose next moves |
 | Weekly Review | future | End-of-week sweep + planning |
 
-If Ady invokes a future mode, reply: *"That mode isn't implemented yet — only Structured Capture is live. Want to capture something instead?"* and stop.
+If the user invokes a future mode, reply: *"That mode isn't implemented yet — only Structured Capture is live. Want to capture something instead?"* and stop.
 
 ---
 
@@ -31,9 +31,9 @@ Lines grouped under P-level headers. Each header applies to every following line
 
 ```
 P1
-need to submit notion event proposal by may 7th
+need to submit project proposal by friday
 P2
-need to install my mom's windshield wipers, lets do it friday
+need to schedule dentist appointment, lets do it next week
 P3
 need to buy protein powder, lets do saturday after work
 P4
@@ -55,38 +55,38 @@ need to find new gym shoes for next month
 6. Write via `mcp__plugin_Notion_notion__notion-create-pages`, one page per item, all fields set.
 7. After write → one-line confirmation: e.g. `Wrote 4 items: 1 P1 Planned, 2 P2/P3 Planned, 1 P4 Backlog.`
 
-**Hard rule:** always show the table preview before writing. Never skip the preview, even on a fully-confident batch — Ady should still see what landed. The approval question itself is only required when at least one `?` is present.
+**Hard rule:** always show the table preview before writing. Never skip the preview, even on a fully-confident batch — the user should still see what landed. The approval question itself is only required when at least one `?` is present.
 
-**Confidence calibration:** be honest. If a domain match is ambiguous, an effort cue is missing, a date is implied not stated, or a Why is a guess — flag it `?`. Auto-writing on bad inferences is worse than asking. When in doubt, flag.
+**Confidence calibration:** be honest. If a domain match is ambiguous, an effort cue is missing, or a date is implied not stated — flag it `?`. Auto-writing on bad inferences is worse than asking. When in doubt, flag.
 
 ### Field rules
 
 #### Title
-Light cleanup only. Fix typos. Capitalize proper nouns (`notion → Notion`, `bmw → BMW`, `quran → Quran`, names). **Preserve Ady's voice** — do not rewrite for tone or style.
+Light cleanup only. Fix typos. Capitalize proper nouns (`notion → Notion`, `iphone → iPhone`, `quran → Quran`, names). **Preserve the user's voice** — do not rewrite for tone or style.
 
 #### Type
-Default `Task`. Use `Project` only when the line clearly describes multi-step work (`build client portal v2`, `ship Heave website redesign`).
+Default `Task`. Use `Project` only when the line clearly describes multi-step work (`build client portal v2`, `ship company website redesign`).
 
 #### Domain
 Inferred from keyword match (case-insensitive). First match wins; if two domains tie, mark with `?`.
 
+The keyword lists below are example defaults — **you should edit this section to match your own life** (your job, your clubs, your courses, your family member names, the brands and tools you actually use). The README points here as the most important file to customize.
+
 | Keywords | Domain |
 |---|---|
-| had an idea, had another idea, project idea, side project, build a [thing] app, build an [thing] app, build out [a/this] [thing] app | Personal Project |
-| Heave, client portal, Heave website | Heave |
-| agency, my agency, agency website, agency portfolio, testimonials, client work | Agency |
-| GDG, Build with AI, Uni-Verse | GDG Projects |
-| Notion event, Notion proposal, Campus Leader, CL event | Notion CL |
-| Arena | Arena |
-| comp310, math324, comp251, school, course, exam, lecture | Coursework |
-| Mom, Nanu, Dad, Aisha, Ariana | Family |
+| had an idea, had another idea, project idea, side project, build a [thing] app, build out [a/this] [thing] app | Personal Project |
+| work, deadline, deck, presentation, manager, OKR, deliverable, standup, sprint, [your company name] | Work |
+| club, society, board, exec, member meeting, [your club names] | Clubs |
+| volunteer, organize event, community, meetup, mentor, [your community roles] | Community |
+| school, course, exam, lecture, assignment, lab, study, [your course codes] | Coursework |
+| family, partner, parent, sibling, kid, [your family member names] | Family |
 | gym, protein, creatine, lift, cardio, shoes, workout, sleep, food, nutrition | Health |
 | Quran, dua, Umrah, prayer, Ramadan, salah, deen, Allah | Deen |
-| BMW, M340i, car, lease, wipers, detail, windshield | Admin |
-| RRSP, FHSA, tax, income, invoice, savings, WealthSimple | Money |
+| car, registration, insurance, lease, license, apartment, rent, taxes (admin sense) | Admin |
+| invest, savings, tax, invoice, expense, budget, [your bank/broker names] | Money |
 | video, blog, post, thread, podcast, newsletter, content | Content |
-| client lead, Klaviyo, automation pitch, recruiting, interview | Career |
-| learn X, read book, course on Y, study X, neetcode | Growth |
+| client lead, recruiter, interview, application, networking, automation pitch | Career |
+| learn X, read book, course on Y, study X, tutorial | Growth |
 | (default — friends, life admin, anything unmatched) | Personal |
 
 #### Priority Level
@@ -123,10 +123,10 @@ Resolve to **absolute ISO (`YYYY-MM-DD`)** using today's date. Never write fuzzy
 | (no date cue) | derive from priority: P1 → today + 1, P2 → today + 7, P3 → today + 14, P4 → today + 30. **Always flag as low confidence** (`flags.dueDate = true` in JSON, trailing `?` in markdown). |
 
 #### Next Action
-**Always leave blank.** Do not infer, do not write the property. If a task is well-scoped, the title itself is the action — a separate Next Action field is redundant. If a task is too vague to act on without a Next Action, it's too vague to capture; let Ady refine it himself.
+**Always leave blank.** Do not infer, do not write the property. If a task is well-scoped, the title itself is the action — a separate Next Action field is redundant. If a task is too vague to act on without a Next Action, it's too vague to capture; let the user refine it.
 
 #### Why (1%)
-**Always leave blank.** Do not infer, do not write the property. The "why" is intrinsic to Ady — inferring it adds friction and bloats the row. If a meaningful Why exists, Ady will fill it in himself.
+**Always leave blank.** Do not infer, do not write the property. The "why" is intrinsic to the user — inferring it adds friction and bloats the row. If a meaningful Why exists, the user will fill it in.
 
 #### Status
 

@@ -7,11 +7,9 @@ type Domain = (typeof DOMAIN_VALUES)[number];
 
 export const DOMAIN_ICONS: Record<Domain, string> = {
   "Personal Project": "💡",
-  Heave: "💼",
-  Agency: "🏢",
-  "GDG Projects": "🌐",
-  "Notion CL": "📝",
-  Arena: "🏟️",
+  Work: "💼",
+  Clubs: "🌐",
+  Community: "📝",
   Coursework: "🎓",
   Family: "👨‍👩‍👧",
   Health: "💪",
