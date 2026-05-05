@@ -83,3 +83,89 @@ describe("itemToProperties", () => {
     expect(props["Why (1%)"]).toBeUndefined();
   });
 });
+
+vi.mock("@notionhq/client", () => {
+  const mockCreate = vi.fn();
+  return {
+    Client: vi.fn().mockImplementation(function () {
+      return {
+        pages: { create: mockCreate },
+      };
+    }),
+    __mockCreate: mockCreate,
+  };
+});
+
+vi.mock("@/lib/env", () => ({
+  env: { NOTION_TOKEN: "test_token", NOTION_DATA_SOURCE_ID: "test_ds_id" },
+}));
+
+import * as notionMock from "@notionhq/client";
+const mockCreate = (notionMock as unknown as { __mockCreate: ReturnType<typeof vi.fn> }).__mockCreate;
+
+describe("writeItems", () => {
+  beforeEach(() => {
+    mockCreate.mockReset();
+  });
+
+  it("writes all items when none fail", async () => {
+    mockCreate.mockResolvedValue({});
+    const items: Item[] = [
+      { ...baseItem, id: "1", title: "one" },
+      { ...baseItem, id: "2", title: "two" },
+      { ...baseItem, id: "3", title: "three" },
+    ];
+
+    const result = await writeItems(items);
+
+    expect(mockCreate).toHaveBeenCalledTimes(3);
+    expect(result.written).toBe(3);
+    expect(result.failures).toEqual([]);
+  });
+
+  it("stops on first failure and returns partial result", async () => {
+    mockCreate
+      .mockResolvedValueOnce({})
+      .mockRejectedValueOnce(new Error("select option 'Notion CL' not found"))
+      .mockResolvedValueOnce({});
+
+    const items: Item[] = [
+      { ...baseItem, id: "1", title: "one" },
+      { ...baseItem, id: "2", title: "two" },
+      { ...baseItem, id: "3", title: "three" },
+    ];
+
+    const result = await writeItems(items);
+
+    expect(mockCreate).toHaveBeenCalledTimes(2);
+    expect(result.written).toBe(1);
+    expect(result.failures).toHaveLength(1);
+    expect(result.failures[0]).toEqual({
+      index: 1,
+      item: items[1],
+      error: "select option 'Notion CL' not found",
+    });
+  });
+
+  it("returns zero written + first failure if very first item fails", async () => {
+    mockCreate.mockRejectedValueOnce(new Error("auth"));
+    const items: Item[] = [{ ...baseItem, id: "1" }];
+
+    const result = await writeItems(items);
+
+    expect(result.written).toBe(0);
+    expect(result.failures).toHaveLength(1);
+    expect(result.failures[0].index).toBe(0);
+  });
+
+  it("calls Notion with the correct data_source_id parent", async () => {
+    mockCreate.mockResolvedValue({});
+    await writeItems([{ ...baseItem, id: "1" }]);
+
+    expect(mockCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        parent: { data_source_id: "test_ds_id" },
+      })
+    );
+  });
+});
