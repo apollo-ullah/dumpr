@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Brain-Dump GUI
 
-## Getting Started
+Local web wrapper around the `ady-operating-system` Claude Code skill. Type a P-level brain dump → preview the inferred Notion rows → click write.
 
-First, run the development server:
+## Run
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+For daily use:
+```bash
+npm run build && npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Bookmark `http://localhost:3000`.
 
-## Learn More
+## First-time setup
 
-To learn more about Next.js, take a look at the following resources:
+1. **Notion integration.** Create an internal integration at https://www.notion.so/profile/integrations (capability: insert content). Open the Inbox database (`https://www.notion.so/2d13ad1b1fe780d3a569e9953ad1e8e7`) → "Add connections" → grant your integration access.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **`.env.local`.** Copy `.env.local.example` → `.env.local` and paste your token:
+   ```
+   NOTION_TOKEN=secret_<your integration token>
+   NOTION_DATA_SOURCE_ID=2d13ad1b-1fe7-8071-92a4-000bcd80335b
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Claude Code OAuth.** Should already be active if you use Claude Code. Verify with `ls ~/.claude/config`. If missing, run `claude /login`.
 
-## Deploy on Vercel
+## Tests
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm test
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+33 tests covering: SKILL.md prompt building, Item → Notion property mapping, batch writes with stop-on-first-failure, agent SDK orchestration with JSON validation, both API routes.
+
+## Spec & plan
+
+- Design spec: `docs/superpowers/specs/2026-05-04-brain-dump-gui-design.md`
+- Implementation plan: `docs/superpowers/plans/2026-05-04-brain-dump-gui.md`
+
+## Architecture
+
+Single Next.js (App Router) app, runs locally only.
+
+- `lib/skill.ts` — reads `~/.claude/skills/ady-operating-system/SKILL.md`, appends a JSON-output instruction block.
+- `lib/agent.ts` — calls Claude via `@anthropic-ai/claude-agent-sdk` (OAuth → Max subscription, no per-token bill), validates response with Zod.
+- `lib/notion.ts` — maps `Item` → Notion property objects, writes via `@notionhq/client`. Stops on first failure.
+- `app/api/process/route.ts` — POST `{ dump }` → `{ today, items }`.
+- `app/api/write/route.ts` — POST `{ items }` → `{ written, failures }`.
+- `app/page.tsx` — single-screen orchestrator (input → preview → done).
+- `components/` — DumpForm, PreviewTable, EditableCell, WriteBar, PartialFailureCallout.
